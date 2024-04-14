@@ -11,17 +11,6 @@ import logging.handlers
 import pathlib
 
 
-logger = logging.getLogger("my_app")
-
-def setup_logging():
-    config_file = pathlib.Path("logging_config.json")
-    with open(config_file) as f_in:
-        config = json.load(f_in)
-
-    logging.config.dictConfig(config)
-
-setup_logging()
-logging.basicConfig(level="INFO")
 
 class Blackbucks:
     def __init__(self, userToken):
@@ -31,7 +20,7 @@ class Blackbucks:
             'authorization': f'Bearer {userToken}',
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
         }
-        logger.info("Class instantiated !")
+        print("Class instantiated !")
 
     def getTestDetails(self, hackathon_id=144):
         response = requests.get(f'https://taptap.blackbucks.me/api/hackathon/{hackathon_id}', headers=self.headers)
@@ -73,7 +62,7 @@ class Blackbucks:
         if test_name:
             score = f"{data.get('score')}/{data.get('totalScore')}"
             return True, score
-        return False, 0
+        return False, "0/0"
 
     def submit_answer(self, qnsIndex, problemId, ans_list, hackathon_id, roundId, attemptId, sub_ans="", code=""):
         params = {
@@ -107,33 +96,33 @@ class Blackbucks:
         )
 
         if(response.json().get("isSuccess")):
-            logger.info(f"{qnsIndex+1} Done ✅")
+            print(f"{qnsIndex+1} Done ✅")
             return True
         else:
-            logger.error(f"Problem with ProblemId {problemId} roundId {roundId} attemptId {attemptId} hackathon_id {hackathon_id}")
+            print(f"Problem with ProblemId {problemId} roundId {roundId} attemptId {attemptId} hackathon_id {hackathon_id}")
             return False
 
     def write_hackathon(self, hackathon_id, attemptId=None, endhack=False):
-        logger.debug(f"Hackathon id {hackathon_id}")
+        print(f"Hackathon id {hackathon_id}")
 
         json_data = self.getTestDetails(hackathon_id)
 
         if(not json_data.get("isRegistered")):
-            logger.info("Registerd to the hackathon")
+            print("Registerd to the hackathon")
             self.register(hackathon_id)
 
         for rnd_no, rnd in enumerate(json_data["rounds"]):
             round_id = rnd.get("id")
             data = self.getRoundDetails(round_id)
 
-            logger.debug(f"Round id {round_id}")
+            print(f"Round id {round_id}")
 
             startDate = date.fromisoformat(data.get("startDate"))
             endDate = date.fromisoformat(data.get("endDate"))
 
             eroju = date.today()
             if not (startDate<=eroju and eroju<=endDate):
-                logger.info("Round not Active")
+                print("Round not Active")
                 continue
 
             rounds_qns = defaultdict(int)
@@ -149,26 +138,26 @@ class Blackbucks:
                 total+= rounds_qns[problem_type]
 
             if total==0:
-                logger.info("no rounds exits")
+                print("no rounds exits")
                 continue
 
             percent = (scored / total)* 100
-            logger.info(f"Percentage is {percent}")
+            print(f"Percentage is {percent}")
 
-            if percent >= 70:
-                logger.info("Probability of getting marks is greater than 70, So writing")
+            if percent >= 40:
+                print("Probability of getting marks is greater than 40, So writing")
             else:
-                logger.info(f"Probability of getting marks is less than 70, Write your Own {hackathon_id} {round_id}")
+                print(f"Probability of getting marks is less than 40, Write your Own {hackathon_id} {round_id}")
                 continue
 
             if not attemptId:
                 attemptId = self.create_participation(hackathon_id, round_id)
             
-            logger.debug(f"Attempt id {attemptId}")
+            print(f"Attempt id {attemptId}")
 
 
             for prob_no, problem in enumerate(data["blocks"]):
-                logger.info(f"Solving problem {prob_no}")
+                print(f"Solving problem {prob_no}")
                 try:
                     if problem["problemType"] == "mcq":
                         ans_list = []
@@ -187,28 +176,28 @@ class Blackbucks:
 
 
                     if problem["problemType"]=="coding":
-                        logger.warning("Got Coding problem hackathon_id {hackathon_id} round_id {round_id} attemptId {attemptId}")
+                        print("Got Coding problem hackathon_id {hackathon_id} round_id {round_id} attemptId {attemptId}")
                         pass
 
                 except Exception as e:
                     print(e)
 
-            logger.info("Edit the submission")
-            logger.debug(f"https://taptap.blackbucks.me/editor/{round_id}/?hackathonid={hackathon_id}&isAdaptive=false&attemptId={attemptId}")
+            print("Edit the submission")
+            print(f"https://taptap.blackbucks.me/editor/{round_id}/?hackathonid={hackathon_id}&isAdaptive=false&attemptId={attemptId}")
             if json_data["rounds"] and endhack:
                 self.end_hackathon(hackathon_id, round_id, attemptId)
                 self.results(hackathon_id)
-                logger.info("chek your results here ")
-                logger.debug(f"https://taptap.blackbucks.me/hackathon/results/{hackathon_id}")
+                print("chek your results here ")
+                print(f"https://taptap.blackbucks.me/hackathon/results/{hackathon_id}")
 
-    def complete_lesson(self, fsd=False, aiml=False, write=False):
+    def complete_lesson(self, fsd=False, aiml=False, write_all=False,  write_uncompleted=False):
 
         if fsd and not aiml:
             lessonPlan = 32
         elif aiml and not fsd:
             lessonPlan = 31
         else:
-            logger.error("Please specify domain correctly")
+            print("Please specify domain correctly")
             return
 
         url = f'https://taptap.blackbucks.me/api/lessonPlan/student/{lessonPlan}'
@@ -221,7 +210,7 @@ class Blackbucks:
                 lessonPhaseContentId = test.get("lessonPhaseContentId")
                 if lessonPhaseContentId:
                     r = requests.post(f"https://taptap.blackbucks.me/api/lessonplan/{lessonPlan}/link/{lessonPhaseContentId}/recordLink", headers=self.headers)
-                    logger.info(r.json()["message"])
+                    print(r.json()["message"])
 
             if test.get("type") == "hackathon":
                 title = test.get("lessonPhaseTitle")
@@ -232,14 +221,17 @@ class Blackbucks:
                 codingCount = test.get("codingCount")
                 audioCount = test.get("audioCount")
 
-                if write:
+
+                if write_all:
                     self.write_hackathon(hackathon_id, endhack=True)
+                elif write_uncompleted:
+                    status, _ = self.results(hackathon_id)
+                    if not status:
+                        self.write_hackathon(hackathon_id, endhack=True)
 
-                completed, score = self.results(hackathon_id)
-                test_link = f"https://taptap.blackbucks.me/hackathon/allRounds/{hackathon_id}/"
+                _ , score = self.results(hackathon_id)
 
-                if completed:
-                    score_link = f"https://taptap.blackbucks.me/hackathon/results/{hackathon_id}"
-                    ans.append((hackathon_id, title, score))
+                ans.append((hackathon_id, title, score))
+                
         
         return ans

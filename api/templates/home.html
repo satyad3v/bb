@@ -2,27 +2,22 @@
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.12.0/css/all.css"
         integrity="sha384-ekOryaXPbeCpWQNxMwSWVvQ0+1VrStoPJq54shlYhR8HzQgig1v5fas6YgOqLoKz" crossorigin="anonymous">
 
-    {% if title %}
-    <title>SatyaDev - {{title}}</title>
-    {% else %}
-    <title>SatyaDev</title>
-    {% endif %}
+    <title>iamNagasatya</title>
+
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a class="navbar-brand" href="/">SatyaDev</a>
+        <a class="navbar-brand" href="/">Blackbucks</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -34,26 +29,50 @@
                     <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                 </li>
             </ul>
-            <!-- <form class="form-inline my-2 my-lg-0" action="/" method="POST">
-                <input class="form-control mr-sm-2" name="link" type="search" placeholder="paste the link here"
-                    aria-label="Search">
-                <button class="btn btn-outline-light btn-primary my-2 my-sm-0" type="submit">Play</button>
-            </form> -->
         </div>
     </nav>
 
+    <header class="text-center text-primary pt-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-9 mx-auto">
+                    <h2 class="">Blackbucks taptap hackathon</h2>
+                </div>
+                <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+                    <form action="/" method="POST">
+                        <div class="form-row">
+                            <div class="col-12 col-md-9 mb-2 mb-md-0">
+                                <input type="text" name="userToken" class="form-control form-control-lg"
+                                    placeholder="paste userToken"> <br>
+                                    <label for="internType">Choose a Internship type: </label>
+                                    <select name="internType" id="internType">
+                                      <option value="AIML">AIML</option>
+                                      <option value="FSD">FSD</option>
+                                    </select>
+                                    
+                                    <br>
 
-    <div class="container mb-3 pt-4">
-        {% for d in data %}
-    
-        {% autoescape false %}
-        {{d}}
-        {% endautoescape %}
-    
-        {% endfor %}
-    </div>
+                                    <label for="write_all"> Write all Tests</label>
+                                    <input id="write_all" type="checkbox" name="write_all"/>
 
-    <footer class="footer mb-5">
+                                    <br>
+
+                                    <label for="write_uncompleted"> Write Uncompleted</label>
+                                    <input id="write_uncompleted" type="checkbox" name="write_uncompleted"/>
+                            </div>
+                            <div class="">
+                                <button type="submit" class="btn btn-block btn-lg btn-primary">Automate</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+    </header>
+
+    <!-- <footer class="footer mb-5">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
@@ -74,7 +93,7 @@
                             <a href="/">Privacy Policy</a>
                         </li>
                     </ul>
-                    <p class="text-muted small mb-4 mb-lg-0">© Made with ❤ by Satya Sai</p>
+                    <p class="text-muted small mb-4 mb-lg-0">© Made with ❤ by Dynamo</p>
                 </div>
                 <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
                     <ul class="list-inline mb-0">
@@ -97,7 +116,7 @@
                 </div>
             </div>
         </div>
-    </footer>
+    </footer> -->
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
