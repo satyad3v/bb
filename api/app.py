@@ -7,6 +7,7 @@ from bbapi import Blackbucks
 
 app = Flask(__name__)
 port = int(os.environ.get("PORT", 5000))
+DEBUG = bool(os.environ.get("DEBUG", True))
 
 auth = HTTPBasicAuth()
 
@@ -72,4 +73,4 @@ def rewrite():
 
 
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0',port=port)
+    app.run(debug=DEBUG,host='0.0.0.0',port=port)
