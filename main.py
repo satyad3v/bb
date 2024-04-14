@@ -1,0 +1,8 @@
+from bbapi import Blackbucks
+from pprint import pprint
+
+token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4ODM5Iiwicm9sZSI6IlN0dWRlbnQiLCJkZXBhcnRtZW50Ijp7ImlkIjoxfSwiY29sbGVnZSI6eyJpZCI6NzQ2fSwiY2l0eSI6eyJpZCI6MX0sInN0YXRlIjp7ImlkIjoxfSwiaWF0IjoxNzEyNDY0ODM2LCJleHAiOjE3MTMwNjk2MzZ9.Ws5cAfJ_wYkDuqmWoVbxIETnSAHdq6y4aIzs-T1ucTo"
+bb = Blackbucks(token)
+
+res = bb.complete_lesson(fsd=True, write=True)
+pprint(res)
